@@ -1,9 +1,16 @@
 import streamlit as st
 from openai import OpenAI
 import os
+import chardet
 
 # Ðu?ng d?n d?n thu m?c ch?a các file hu?n luy?n
 data_folder = "data"
+
+def detect_encoding(file_path):
+    with open(file_path, "rb") as f:
+        raw_data = f.read()
+    result = chardet.detect(raw_data)
+    return result["encoding"]
 
 def load_training_data(folder_path):
     training_content = []
@@ -11,22 +18,11 @@ def load_training_data(folder_path):
         if filename.endswith(".txt"):
             file_path = os.path.join(folder_path, filename)
             try:
-                with open(file_path, "r", encoding="utf-8-sig") as file:
+                encoding = detect_encoding(file_path)
+                with open(file_path, "r", encoding=encoding) as file:
                     training_content.append(file.read())
-            except UnicodeDecodeError:
-                try:
-                    with open(file_path, "r", encoding="utf-16") as file:
-                        training_content.append(file.read())
-                except UnicodeDecodeError:
-                    try:
-                        with open(file_path, "r", encoding="latin-1") as file:
-                            training_content.append(file.read())
-                    except UnicodeDecodeError:
-                        try:
-                            with open(file_path, "rb") as file:
-                                training_content.append(file.read().decode(errors="ignore"))
-                        except Exception as e:
-                            st.warning(f"?? Không th? d?c file: {filename} - L?i: {e}")
+            except Exception as e:
+                st.warning(f"?? Không th? d?c file: {filename} - L?i: {e}")
     return "\n\n".join(training_content)
 
 # T?i d? li?u t? t?t c? các file trong thu m?c data
