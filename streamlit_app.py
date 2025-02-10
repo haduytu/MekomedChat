@@ -11,7 +11,7 @@ def load_training_data(folder_path):
         if filename.endswith(".txt"):
             file_path = os.path.join(folder_path, filename)
             try:
-                with open(file_path, "r", encoding="utf-8") as file:
+                with open(file_path, "r", encoding="utf-8-sig") as file:
                     training_content.append(file.read())
             except UnicodeDecodeError:
                 try:
@@ -24,7 +24,7 @@ def load_training_data(folder_path):
                     except UnicodeDecodeError:
                         try:
                             with open(file_path, "rb") as file:
-                                training_content.append(file.read().decode(errors="replace"))
+                                training_content.append(file.read().decode(errors="ignore"))
                         except Exception as e:
                             st.warning(f"?? Không th? d?c file: {filename} - L?i: {e}")
     return "\n\n".join(training_content)
