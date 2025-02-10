@@ -10,8 +10,12 @@ def load_training_data(folder_path):
     for filename in os.listdir(folder_path):
         if filename.endswith(".txt"):
             file_path = os.path.join(folder_path, filename)
-            with open(file_path, "r", encoding="utf-8") as file:
-                training_content.append(file.read())
+            try:
+                with open(file_path, "r", encoding="utf-8") as file:
+                    training_content.append(file.read())
+            except UnicodeDecodeError:
+                with open(file_path, "r", encoding="latin-1") as file:
+                    training_content.append(file.read())
     return "\n\n".join(training_content)
 
 # T?i d? li?u t? t?t c? các file trong thu m?c data
