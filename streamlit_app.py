@@ -6,7 +6,7 @@ def rfile(name_file):
         content_sys = file.read()
     return content_sys
 
-# Hi?n th? logo ? tr�n c�ng, can gi?a
+# Hiển thị logo ở trên cùng, căn giữa
 try:
     col1, col2, col3 = st.columns([3, 2, 3])
     with col2:
@@ -14,7 +14,7 @@ try:
 except Exception as e:
     pass
 
-# T�y ch?nh n?i dung ti�u d?
+# Tùy chỉnh nội dung tiêu đề
 title_content = rfile("00.xinchao.txt")
 
 st.markdown(
@@ -24,20 +24,20 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# L?y OpenAI API key t? st.secrets.
+# Lấy OpenAI API key từ st.secrets.
 openai_api_key = st.secrets.get("OPENAI_API_KEY")
 
-# T?o OpenAI client.
+# Tạo OpenAI client.
 client = OpenAI(api_key=openai_api_key)
 
-#user_name = st.session_state.get("customer_name", "B?n")
+#user_name = st.session_state.get("customer_name", "Bạn")
 
 INITIAL_SYSTEM_MESSAGE = {
     "role": "system",
     "content": f"""
     {rfile("01.system_trainning.txt")}
     
-    #?? Trong cu?c tr� chuy?n n�y, kh�ch h�ng t�n l� t? th�ng tin kh�ch h�ng nh?p v�o. H�y lu�n xung h� v?i h? theo quy t?c tr�n.
+    #📌 Trong cuộc trò chuyện này, khách hàng tên là từ thông tin khách hàng nhập vào. Hãy luôn xưng hô với họ theo quy tắc trên.
     #""",
 }
 
@@ -55,7 +55,7 @@ for message in st.session_state.messages:
             st.markdown(message["content"])
 
 
-if prompt := st.chat_input(f"B?n nh?p n?i dung c?n trao d?i ? d�y nh�."):
+if prompt := st.chat_input(f"Bạn nhập nội dung cần trao đổi ở đây nhé."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
